@@ -1,0 +1,858 @@
+base) ian@ian-Latitude-E7440:~$ nano spec.f
+(base) ian@ian-Latitude-E7440:~$ 
+(base) ian@ian-Latitude-E7440:~$ gfortran spec.f -ffree-form
+(base) ian@ian-Latitude-E7440:~$ ./a.out
+           1   3.60764646E+35
+           2   2.35215180E-06
+           3   1.56179452E-02
+           4   2.51048013E-14
+           5   2.35212588E-06
+           6   2.40490746E-14
+           7   1.56249981E-02
+           8   2.52737369E-14
+           9   2.35214907E-06
+          10   2.36385144E-14
+          11   1.56250000E-02
+          12   2.45359017E-14
+          13   4.75314232E-14
+          14   2.49766350E-14
+          15   1.56250000E-02
+          16   2.49047422E-14
+          17   1.20570289E-03
+          18   2.34096579E-14
+          19   1.56250037E-02
+          20   2.52886413E-14
+          21   5.14727184E-14
+          22   2.59136516E-14
+          23   1.56249981E-02
+          24   2.82941327E-14
+          25   1.29514409E-03
+          26   1.29512616E-03
+          27   1.17396209E-02
+          28   2.68990152E-14
+          29   1.29511917E-03
+          30   2.52603877E-14
+          31   1.56250000E-02
+          32   2.97809195E-14
+          33   6.45481329E-03
+          34   2.57387072E-14
+          35   1.56250000E-02
+          36   2.52294676E-14
+          37   2.42769555E-03
+          38   2.42768298E-03
+          39   8.34195130E-03
+          40   2.55457175E-14
+          41   2.42768670E-03
+          42   2.50981063E-14
+          43   1.56250000E-02
+          44   2.51267547E-14
+          45   5.10286258E-14
+          46   2.49992711E-14
+          47   1.56250000E-02
+          48   2.51145608E-14
+          49   1.20568951E-03
+          50   2.52333402E-14
+          51   1.56250000E-02
+          52   2.46341609E-14
+          53   4.27019565E-14
+          54   2.40414598E-14
+          55   1.56250000E-02
+          56   2.15933211E-14
+          57   3.88511759E-03
+          58   2.49218879E-14
+          59   1.56250000E-02
+          60   2.30686526E-14
+          61   3.88512691E-03
+          62   3.88510828E-03
+          63   3.96967493E-03
+          64   2.05728785E-14
+          65   1.73477344E-02
+          66   2.46162767E-14
+          67   3.96966469E-03
+          68   3.88511247E-03
+          69   3.88513063E-03
+          70   2.68848562E-14
+          71   1.56250000E-02
+          72   2.86968393E-14
+          73   3.88511713E-03
+          74   2.45907759E-14
+          75   1.56250037E-02
+          76   2.61510360E-14
+          77   5.55111478E-14
+          78   2.53556907E-14
+          79   1.56250000E-02
+          80   2.99519049E-14
+          81   1.20568660E-03
+          82   2.45489444E-14
+          83   1.56250000E-02
+          84   2.49993643E-14
+          85   5.17363929E-14
+          86   2.51265971E-14
+          87   1.56250000E-02
+          88   2.50982672E-14
+          89   2.42769509E-03
+          90   2.55455311E-14
+          91   8.34188331E-03
+          92   2.42771208E-03
+          93   2.42770463E-03
+          94   2.50767628E-14
+          95   1.56250000E-02
+          96   2.51489486E-14
+          97   6.45480724E-03
+          98   2.69940202E-14
+          99   1.56250000E-02
+         100   2.50522852E-14
+         101   1.29512942E-03
+         102   2.47755375E-14
+         103   1.17395585E-02
+         104   1.29515328E-03
+         105   1.29515619E-03
+         106   2.72253669E-14
+         107   1.56250000E-02
+         108   2.40403265E-14
+         109   4.55191474E-14
+         110   2.47889545E-14
+         111   1.56250000E-02
+         112   2.07209162E-14
+         113   1.20570452E-03
+         114   2.65803598E-14
+         115   1.56250000E-02
+         116   2.54069786E-14
+         117   5.44703205E-14
+         118   2.54794524E-14
+         119   1.56250000E-02
+         120   2.52311328E-14
+         121   2.35265611E-06
+         122   2.70499023E-14
+         123   1.56250037E-02
+         124   2.48403000E-14
+         125   2.35261587E-06
+         126   2.51464245E-14
+         127   1.56179396E-02
+         128   2.35360972E-06
+(base) ian@ian-Latitude-E7440:~$ cat spec.f 
+      PROGRAM PowerSpectrumEstimation
+      INTEGER N, I
+      PARAMETER (N=256)
+      REAL SIGNAL(N), POWER(N/2)
+      COMPLEX FFTOUT(N)
+
+      ! Initialize your signal here. 
+      ! For example, let's use a simple sine wave.
+      DO I = 1, N
+        SIGNAL(I) = SIN(2 * 3.14159 * I / N)
+      END DO
+
+      ! Call FFT subroutine on SIGNAL, results stored in FFTOUT
+      CALL FFT(SIGNAL, FFTOUT, N)
+
+      ! Compute power spectrum
+      DO I = 1, N/2
+        POWER(I) = (ABS(FFTOUT(I))**2)/N
+      END DO
+
+      ! Output the power spectrum
+      DO I = 1, N/2
+        PRINT *, I, POWER(I)
+      END DO
+
+      END PROGRAM
+
+
+      SUBROUTINE FFT(X, Y, N)
+      REAL X(N)
+      COMPLEX Y(N), W, TEMP
+      INTEGER N, I, J, K, L, LE, LE1, IP
+
+      ! FFT algorithm implementation
+      ! This is a very basic version and for a complete and efficient implementation,
+      ! it's better to use a library such as FFTPACK.
+
+      ! Bit-reversal Permutation
+      J = 1
+      DO I = 1, N - 1
+        IF (I .LT. J) THEN
+          TEMP = CMPLX(X(J), 0.0)
+          Y(J) = CMPLX(X(I), 0.0)
+          Y(I) = TEMP
+        END IF
+        K = N / 2
+      DO  WHILE (K .LT. J)
+          J = J - K
+          K = K / 2
+        END DO
+        J = J + K
+      END DO
+
+      ! Danielson-Lanczos algorithm
+      L = 1
+      DO WHILE (L .LT. N)
+        LE = 2 * L
+        LE1 = LE / 2
+        W = CMPLX(COS(3.14159 / LE1), -SIN(3.14159 / LE1))
+        DO J = 1, N, LE
+          IP = J + LE1
+          TEMP = Y(IP) * W
+          Y(IP) = Y(J) - TEMP
+          Y(J) = Y(J) + TEMP
+        END DO
+        L = LE
+      END DO
+
+      END SUBROUTINE
+(base) ian@ian-Latitude-E7440:~$ sloccount  spec.f
+Have a non-directory at the top, so creating directory top_dir
+Adding /home/ian/spec.f to top_dir
+Categorizing files.
+Finding a working MD5 command....
+Found a working MD5 command.
+Computing results.
+
+
+SLOC	Directory	SLOC-by-Language (Sorted)
+48      top_dir         fortran=48
+
+
+Totals grouped by language (dominant language first):
+fortran:         48 (100.00%)
+
+
+
+
+Total Physical Source Lines of Code (SLOC)                = 48
+Development Effort Estimate, Person-Years (Person-Months) = 0.01 (0.10)
+ (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))
+Schedule Estimate, Years (Months)                         = 0.09 (1.04)
+ (Basic COCOMO model, Months = 2.5 * (person-months**0.38))
+Estimated Average Number of Developers (Effort/Schedule)  = 0.10
+Total Estimated Cost to Develop                           = $ 1,114
+ (average salary = $56,286/year, overhead = 2.40).
+SLOCCount, Copyright (C) 2001-2004 David A. Wheeler
+SLOCCount is Open Source Software/Free Software, licensed under the GNU GPL.
+SLOCCount comes with ABSOLUTELY NO WARRANTY, and you are welcome to
+redistribute it under certain conditions as specified by the GNU GPL license;
+see the documentation for details.
+Please credit this data as "generated using David A. Wheeler's 'SLOCCount'."
+(base) ian@ian-Latitude-E7440:~$ gfortran spec.f -ffree-form -S
+(base) ian@ian-Latitude-E7440:~$ cat spec.s
+	.file	"spec.f"
+	.text
+	.globl	fft_
+	.type	fft_, @function
+fft_:
+.LFB0:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	pushq	%rbx
+	subq	$120, %rsp
+	.cfi_offset 3, -24
+	movq	%rdi, -104(%rbp)
+	movq	%rsi, -112(%rbp)
+	movq	%rdx, -120(%rbp)
+	movq	-120(%rbp), %rax
+	movl	(%rax), %eax
+	cltq
+	movq	%rax, -56(%rbp)
+	movq	-56(%rbp), %rax
+	movl	$0, %edx
+	testq	%rax, %rax
+	cmovs	%rdx, %rax
+	movq	%rax, %r8
+	movl	$0, %r9d
+	movq	-120(%rbp), %rax
+	movl	(%rax), %eax
+	cltq
+	movq	%rax, -64(%rbp)
+	movq	-64(%rbp), %rax
+	movl	$0, %edx
+	testq	%rax, %rax
+	cmovs	%rdx, %rax
+	movq	%rax, %rcx
+	movl	$0, %ebx
+	movl	$1, -36(%rbp)
+	movq	-120(%rbp), %rax
+	movl	(%rax), %eax
+	leal	-1(%rax), %ecx
+	movl	$1, -32(%rbp)
+.L7:
+	cmpl	%ecx, -32(%rbp)
+	setg	%al
+	movzbl	%al, %eax
+	testl	%eax, %eax
+	jne	.L17
+	movl	-32(%rbp), %eax
+	cmpl	-36(%rbp), %eax
+	jge	.L3
+	movl	-36(%rbp), %eax
+	cltq
+	leaq	-1(%rax), %rdx
+	movq	-104(%rbp), %rax
+	movss	(%rax,%rdx,4), %xmm0
+	movss	%xmm0, -20(%rbp)
+	movss	-20(%rbp), %xmm0
+	movss	%xmm0, -72(%rbp)
+	pxor	%xmm0, %xmm0
+	movss	%xmm0, -68(%rbp)
+	movl	-32(%rbp), %eax
+	cltq
+	leaq	-1(%rax), %rdx
+	movq	-104(%rbp), %rax
+	movss	(%rax,%rdx,4), %xmm0
+	movl	-36(%rbp), %eax
+	cltq
+	subq	$1, %rax
+	movq	-112(%rbp), %rdx
+	movss	%xmm0, (%rdx,%rax,8)
+	movq	-112(%rbp), %rdx
+	pxor	%xmm0, %xmm0
+	movss	%xmm0, 4(%rdx,%rax,8)
+	movl	-32(%rbp), %eax
+	cltq
+	subq	$1, %rax
+	movq	-112(%rbp), %rdx
+	movss	-20(%rbp), %xmm0
+	movss	%xmm0, (%rdx,%rax,8)
+	movq	-112(%rbp), %rdx
+	pxor	%xmm0, %xmm0
+	movss	%xmm0, 4(%rdx,%rax,8)
+.L3:
+	movq	-120(%rbp), %rax
+	movl	(%rax), %eax
+	movl	%eax, %edx
+	shrl	$31, %edx
+	addl	%edx, %eax
+	sarl	%eax
+	movl	%eax, -40(%rbp)
+.L6:
+	movl	-40(%rbp), %eax
+	cmpl	-36(%rbp), %eax
+	jge	.L18
+	movl	-40(%rbp), %eax
+	subl	%eax, -36(%rbp)
+	movl	-40(%rbp), %eax
+	movl	%eax, %edx
+	shrl	$31, %edx
+	addl	%edx, %eax
+	sarl	%eax
+	movl	%eax, -40(%rbp)
+	jmp	.L6
+.L18:
+	nop
+	movl	-40(%rbp), %eax
+	addl	%eax, -36(%rbp)
+	addl	$1, -32(%rbp)
+	jmp	.L7
+.L17:
+	nop
+	movl	$1, -44(%rbp)
+.L14:
+	movq	-120(%rbp), %rax
+	movl	(%rax), %eax
+	cmpl	%eax, -44(%rbp)
+	jge	.L19
+	movl	-44(%rbp), %eax
+	addl	%eax, %eax
+	movl	%eax, -76(%rbp)
+	movl	-76(%rbp), %eax
+	movl	%eax, %edx
+	shrl	$31, %edx
+	addl	%edx, %eax
+	sarl	%eax
+	movl	%eax, -80(%rbp)
+	pxor	%xmm1, %xmm1
+	cvtsi2ssl	-80(%rbp), %xmm1
+	movss	.LC1(%rip), %xmm0
+	divss	%xmm1, %xmm0
+	movd	%xmm0, %eax
+	movd	%eax, %xmm0
+	call	cosf@PLT
+	movd	%xmm0, %eax
+	movl	%eax, -24(%rbp)
+	pxor	%xmm1, %xmm1
+	cvtsi2ssl	-80(%rbp), %xmm1
+	movss	.LC1(%rip), %xmm0
+	divss	%xmm1, %xmm0
+	movd	%xmm0, %eax
+	movd	%eax, %xmm0
+	call	sinf@PLT
+	movd	%xmm0, %eax
+	movss	.LC2(%rip), %xmm0
+	movd	%eax, %xmm5
+	xorps	%xmm0, %xmm5
+	movaps	%xmm5, %xmm0
+	movss	%xmm0, -28(%rbp)
+	movss	-28(%rbp), %xmm0
+	movss	-24(%rbp), %xmm1
+	movss	%xmm1, -88(%rbp)
+	movss	%xmm0, -84(%rbp)
+	movq	-120(%rbp), %rax
+	movl	(%rax), %esi
+	movl	-76(%rbp), %ecx
+	movl	$1, -36(%rbp)
+	testl	%ecx, %ecx
+	jns	.L10
+	movl	%esi, %edx
+	movl	$1, %eax
+	subl	%edx, %eax
+	movl	%ecx, %edx
+	movl	%edx, %ebx
+	negl	%ebx
+	movl	$0, %edx
+	divl	%ebx
+	cmpl	$1, %esi
+	jg	.L20
+	jmp	.L13
+.L10:
+	movl	%esi, %eax
+	subl	$1, %eax
+	movl	%ecx, %edi
+	movl	$0, %edx
+	divl	%edi
+	testl	%esi, %esi
+	jle	.L20
+.L13:
+	movl	-36(%rbp), %esi
+	movl	-80(%rbp), %edx
+	addl	%esi, %edx
+	movl	%edx, -92(%rbp)
+	movl	-92(%rbp), %edx
+	movslq	%edx, %rdx
+	subq	$1, %rdx
+	movq	-112(%rbp), %rsi
+	movss	(%rsi,%rdx,8), %xmm0
+	movq	-112(%rbp), %rsi
+	movss	4(%rsi,%rdx,8), %xmm1
+	movaps	%xmm0, %xmm2
+	mulss	-24(%rbp), %xmm2
+	movaps	%xmm1, %xmm4
+	mulss	-28(%rbp), %xmm4
+	movaps	%xmm1, %xmm3
+	mulss	-24(%rbp), %xmm3
+	movaps	%xmm0, %xmm1
+	mulss	-28(%rbp), %xmm1
+	subss	%xmm4, %xmm2
+	movaps	%xmm2, %xmm0
+	movss	%xmm0, -20(%rbp)
+	addss	%xmm1, %xmm3
+	movaps	%xmm3, %xmm0
+	movss	%xmm0, -96(%rbp)
+	movss	-96(%rbp), %xmm0
+	movss	-20(%rbp), %xmm1
+	movss	%xmm1, -72(%rbp)
+	movss	%xmm0, -68(%rbp)
+	movl	-36(%rbp), %edx
+	movslq	%edx, %rdx
+	subq	$1, %rdx
+	movq	-112(%rbp), %rsi
+	movss	(%rsi,%rdx,8), %xmm1
+	movq	-112(%rbp), %rsi
+	movss	4(%rsi,%rdx,8), %xmm0
+	movl	-92(%rbp), %edx
+	movslq	%edx, %rdx
+	subq	$1, %rdx
+	subss	-20(%rbp), %xmm1
+	subss	-96(%rbp), %xmm0
+	movq	-112(%rbp), %rsi
+	movss	%xmm1, (%rsi,%rdx,8)
+	movq	-112(%rbp), %rsi
+	movss	%xmm0, 4(%rsi,%rdx,8)
+	movl	-36(%rbp), %edx
+	movslq	%edx, %rdx
+	subq	$1, %rdx
+	movq	-112(%rbp), %rsi
+	movss	(%rsi,%rdx,8), %xmm1
+	movq	-112(%rbp), %rsi
+	movss	4(%rsi,%rdx,8), %xmm0
+	movl	-36(%rbp), %edx
+	movslq	%edx, %rdx
+	subq	$1, %rdx
+	addss	-20(%rbp), %xmm1
+	addss	-96(%rbp), %xmm0
+	movq	-112(%rbp), %rsi
+	movss	%xmm1, (%rsi,%rdx,8)
+	movq	-112(%rbp), %rsi
+	movss	%xmm0, 4(%rsi,%rdx,8)
+	addl	%ecx, -36(%rbp)
+	movl	%eax, %edx
+	subl	$1, %eax
+	testl	%edx, %edx
+	je	.L20
+	jmp	.L13
+.L20:
+	nop
+	movl	-76(%rbp), %eax
+	movl	%eax, -44(%rbp)
+	jmp	.L14
+.L19:
+	nop
+	nop
+	movq	-8(%rbp), %rbx
+	leave
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	fft_, .-fft_
+	.section	.rodata
+	.align 4
+.LC5:
+	.long	256
+.LC6:
+	.string	"spec.f"
+	.text
+	.type	MAIN__, @function
+MAIN__:
+.LFB1:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	pushq	%rbx
+	subq	$4152, %rsp
+	.cfi_offset 3, -24
+	movl	$1, -2068(%rbp)
+.L23:
+	movl	-2068(%rbp), %eax
+	cmpl	$256, %eax
+	setg	%al
+	movzbl	%al, %eax
+	testl	%eax, %eax
+	jne	.L28
+	movl	-2068(%rbp), %eax
+	pxor	%xmm1, %xmm1
+	cvtsi2ssl	%eax, %xmm1
+	movss	.LC3(%rip), %xmm0
+	mulss	%xmm1, %xmm0
+	movss	.LC4(%rip), %xmm1
+	divss	%xmm1, %xmm0
+	movd	%xmm0, %eax
+	movl	-2068(%rbp), %edx
+	movslq	%edx, %rdx
+	leaq	-1(%rdx), %rbx
+	movd	%eax, %xmm0
+	call	sinf@PLT
+	movd	%xmm0, %eax
+	movl	%eax, -3616(%rbp,%rbx,4)
+	movl	-2068(%rbp), %eax
+	addl	$1, %eax
+	movl	%eax, -2068(%rbp)
+	jmp	.L23
+.L28:
+	nop
+	leaq	-2064(%rbp), %rcx
+	leaq	-3616(%rbp), %rax
+	leaq	.LC5(%rip), %rdx
+	movq	%rcx, %rsi
+	movq	%rax, %rdi
+	call	fft_
+	movl	$1, -2068(%rbp)
+.L25:
+	movl	-2068(%rbp), %eax
+	cmpl	$128, %eax
+	setg	%al
+	movzbl	%al, %eax
+	testl	%eax, %eax
+	jne	.L29
+	movl	-2068(%rbp), %eax
+	cltq
+	subq	$1, %rax
+	movss	-2064(%rbp,%rax,8), %xmm1
+	movss	-2060(%rbp,%rax,8), %xmm0
+	movss	%xmm1, -4152(%rbp)
+	movss	%xmm0, -4148(%rbp)
+	movq	-4152(%rbp), %rax
+	movq	%rax, %xmm0
+	call	cabsf@PLT
+	mulss	%xmm0, %xmm0
+	movl	-2068(%rbp), %eax
+	cltq
+	subq	$1, %rax
+	movss	.LC4(%rip), %xmm1
+	divss	%xmm1, %xmm0
+	movss	%xmm0, -2592(%rbp,%rax,4)
+	movl	-2068(%rbp), %eax
+	addl	$1, %eax
+	movl	%eax, -2068(%rbp)
+	jmp	.L25
+.L29:
+	nop
+	movl	$1, -2068(%rbp)
+.L27:
+	movl	-2068(%rbp), %eax
+	cmpl	$128, %eax
+	setg	%al
+	movzbl	%al, %eax
+	testl	%eax, %eax
+	jne	.L30
+	leaq	.LC6(%rip), %rax
+	movq	%rax, -4136(%rbp)
+	movl	$23, -4128(%rbp)
+	movl	$128, -4144(%rbp)
+	movl	$6, -4140(%rbp)
+	leaq	-4144(%rbp), %rax
+	movq	%rax, %rdi
+	call	_gfortran_st_write@PLT
+	leaq	-2068(%rbp), %rcx
+	leaq	-4144(%rbp), %rax
+	movl	$4, %edx
+	movq	%rcx, %rsi
+	movq	%rax, %rdi
+	call	_gfortran_transfer_integer_write@PLT
+	movl	-2068(%rbp), %eax
+	cltq
+	subq	$1, %rax
+	leaq	-2592(%rbp), %rdx
+	salq	$2, %rax
+	leaq	(%rdx,%rax), %rcx
+	leaq	-4144(%rbp), %rax
+	movl	$4, %edx
+	movq	%rcx, %rsi
+	movq	%rax, %rdi
+	call	_gfortran_transfer_real_write@PLT
+	leaq	-4144(%rbp), %rax
+	movq	%rax, %rdi
+	call	_gfortran_st_write_done@PLT
+	movl	-2068(%rbp), %eax
+	addl	$1, %eax
+	movl	%eax, -2068(%rbp)
+	jmp	.L27
+.L30:
+	nop
+	nop
+	movq	-8(%rbp), %rbx
+	leave
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE1:
+	.size	MAIN__, .-MAIN__
+	.globl	main
+	.type	main, @function
+main:
+.LFB2:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	subq	$16, %rsp
+	movl	%edi, -4(%rbp)
+	movq	%rsi, -16(%rbp)
+	movq	-16(%rbp), %rdx
+	movl	-4(%rbp), %eax
+	movq	%rdx, %rsi
+	movl	%eax, %edi
+	call	_gfortran_set_args@PLT
+	leaq	options.7.0(%rip), %rax
+	movq	%rax, %rsi
+	movl	$7, %edi
+	call	_gfortran_set_options@PLT
+	call	MAIN__
+	movl	$0, %eax
+	leave
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE2:
+	.size	main, .-main
+	.section	.rodata
+	.align 16
+	.type	options.7.0, @object
+	.size	options.7.0, 28
+options.7.0:
+	.long	2116
+	.long	4095
+	.long	0
+	.long	1
+	.long	1
+	.long	0
+	.long	31
+	.align 4
+.LC1:
+	.long	1078530000
+	.align 16
+.LC2:
+	.long	-2147483648
+	.long	0
+	.long	0
+	.long	0
+	.align 4
+.LC3:
+	.long	1086918608
+	.align 4
+.LC4:
+	.long	1132462080
+	.ident	"GCC: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0"
+	.section	.note.GNU-stack,"",@progbits
+(base) ian@ian-Latitude-E7440:~$ gfortran spec.s -o specs
+(base) ian@ian-Latitude-E7440:~$ ./specs
+           1   56.4442673    
+           2   2.35215180E-06
+           3   1.56179452E-02
+           4   2.51048013E-14
+           5   2.35212588E-06
+           6   2.40490746E-14
+           7   1.56249981E-02
+           8   2.52737369E-14
+           9   2.35214907E-06
+          10   2.36385144E-14
+          11   1.56250000E-02
+          12   2.45359017E-14
+          13   4.75314232E-14
+          14   2.49766350E-14
+          15   1.56250000E-02
+          16   2.49047422E-14
+          17   1.20570289E-03
+          18   2.34096579E-14
+          19   1.56250037E-02
+          20   2.52886413E-14
+          21   5.14727184E-14
+          22   2.59136516E-14
+          23   1.56249981E-02
+          24   2.82941327E-14
+          25   1.29514409E-03
+          26   1.29512616E-03
+          27   1.17396209E-02
+          28   2.68990152E-14
+          29   1.29511917E-03
+          30   2.52603877E-14
+          31   1.56250000E-02
+          32   2.97809195E-14
+          33   6.45481329E-03
+          34   2.57387072E-14
+          35   1.56250000E-02
+          36   2.52294676E-14
+          37   2.42769555E-03
+          38   2.42768298E-03
+          39   8.34195130E-03
+          40   2.55457175E-14
+          41   2.42768670E-03
+          42   2.50981063E-14
+          43   1.56250000E-02
+          44   2.51267547E-14
+          45   5.10286258E-14
+          46   2.49992711E-14
+          47   1.56250000E-02
+          48   2.51145608E-14
+          49   1.20568951E-03
+          50   2.52333402E-14
+          51   1.56250000E-02
+          52   2.46341609E-14
+          53   4.27019565E-14
+          54   2.40414598E-14
+          55   1.56250000E-02
+          56   2.15933211E-14
+          57   3.88511759E-03
+          58   2.49218879E-14
+          59   1.56250000E-02
+          60   2.30686526E-14
+          61   3.88512691E-03
+          62   3.88510828E-03
+          63   3.96967493E-03
+          64   2.05728785E-14
+          65   1.73477344E-02
+          66   2.46162767E-14
+          67   3.96966469E-03
+          68   3.88511247E-03
+          69   3.88513063E-03
+          70   2.68848562E-14
+          71   1.56250000E-02
+          72   2.86968393E-14
+          73   3.88511713E-03
+          74   2.45907759E-14
+          75   1.56250037E-02
+          76   2.61510360E-14
+          77   5.55111478E-14
+          78   2.53556907E-14
+          79   1.56250000E-02
+          80   2.99519049E-14
+          81   1.20568660E-03
+          82   2.45489444E-14
+          83   1.56250000E-02
+          84   2.49993643E-14
+          85   5.17363929E-14
+          86   2.51265971E-14
+          87   1.56250000E-02
+          88   2.50982672E-14
+          89   2.42769509E-03
+          90   2.55455311E-14
+          91   8.34188331E-03
+          92   2.42771208E-03
+          93   2.42770463E-03
+          94   2.50767628E-14
+          95   1.56250000E-02
+          96   2.51489486E-14
+          97   6.45480724E-03
+          98   2.69940202E-14
+          99   1.56250000E-02
+         100   2.50522852E-14
+         101   1.29512942E-03
+         102   2.47755375E-14
+         103   1.17395585E-02
+         104   1.29515328E-03
+         105   1.29515619E-03
+         106   2.72253669E-14
+         107   1.56250000E-02
+         108   2.40403265E-14
+         109   4.55191474E-14
+         110   2.47889545E-14
+         111   1.56250000E-02
+         112   2.07209162E-14
+         113   1.20570452E-03
+         114   2.65803598E-14
+         115   1.56250000E-02
+         116   2.54069786E-14
+         117   5.44703205E-14
+         118   2.54794524E-14
+         119   1.56250000E-02
+         120   2.52311328E-14
+         121   2.35265611E-06
+         122   2.70499023E-14
+         123   1.56250037E-02
+         124   2.48403000E-14
+         125   2.35261587E-06
+         126   2.51464245E-14
+         127   1.56179396E-02
+         128   2.35360972E-06
+(base) ian@ian-Latitude-E7440:~$ sloccount spec.s
+Have a non-directory at the top, so creating directory top_dir
+Adding /home/ian/spec.s to top_dir
+Categorizing files.
+Finding a working MD5 command....
+Found a working MD5 command.
+Computing results.
+
+
+SLOC	Directory	SLOC-by-Language (Sorted)
+456     top_dir         asm=456
+
+
+Totals grouped by language (dominant language first):
+asm:            456 (100.00%)
+
+
+
+
+Total Physical Source Lines of Code (SLOC)                = 456
+Development Effort Estimate, Person-Years (Person-Months) = 0.09 (1.05)
+ (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))
+Schedule Estimate, Years (Months)                         = 0.21 (2.55)
+ (Basic COCOMO model, Months = 2.5 * (person-months**0.38))
+Estimated Average Number of Developers (Effort/Schedule)  = 0.41
+Total Estimated Cost to Develop                           = $ 11,846
+ (average salary = $56,286/year, overhead = 2.40).
+SLOCCount, Copyright (C) 2001-2004 David A. Wheeler
+SLOCCount is Open Source Software/Free Software, licensed under the GNU GPL.
+SLOCCount comes with ABSOLUTELY NO WARRANTY, and you are welcome to
+redistribute it under certain conditions as specified by the GNU GPL license;
+see the documentation for details.
+Please credit this data as "generated using David A. Wheeler's 'SLOCCount'."
+(base) ian@ian-Latitude-E7440:~$ 
+
